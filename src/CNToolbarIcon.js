@@ -21,17 +21,26 @@ export const CNToolbarIcon = (props) => {
         selectedTag,
         buttonTypes,
         selectedBackgroundColor,
-    } = props    
+    } = props
     let colorCondition = '';
     let backgroundColorCondition = '';
-    if (buttonTypes === 'style') {     
-        backgroundColorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedBackgroundColor : backgroundColor;   
+    let notImageDefaultStyle = '';
+    if (buttonTypes === 'style') {
+        backgroundColorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedBackgroundColor : backgroundColor;
         colorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedColor : color;
     }
-    else if (buttonTypes === 'tag') {    
-        backgroundColorCondition = selectedTag === toolTypeText ? selectedBackgroundColor : backgroundColor;    
+    else if (buttonTypes === 'tag') {
+        backgroundColorCondition = selectedTag === toolTypeText ? selectedBackgroundColor : backgroundColor;
         colorCondition = selectedTag === toolTypeText ? selectedColor : color
     }
+
+    if (toolTypeText !== 'image') {
+        notImageDefaultStyle = {
+            fontSize: size,
+            color: colorCondition
+        }
+    }
+    
     return (
         <TouchableWithoutFeedback
             onPress={() => {
@@ -44,10 +53,14 @@ export const CNToolbarIcon = (props) => {
                 }]}
             >
                 {
-                   React.cloneElement(iconComponent, { size , color: colorCondition , style: [{
-                    fontSize: size,
-                    color: colorCondition
-                   }, iconComponent.props.style || {}] })
+                    React.cloneElement(iconComponent, {
+                        size,
+                        color: colorCondition,
+                        style: [
+                            notImageDefaultStyle,
+                            iconComponent.props.style || {}
+                        ]
+                    })
                 }
             </View>
         </TouchableWithoutFeedback>
